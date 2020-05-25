@@ -30,7 +30,7 @@ npm install --save d3
 import {select} from 'd3';
 ```
 
-3. The svgRef will contain the svg element once the svg component is rendered, So it is safe to use in useEffect. Then you can use select to perform a d3 selection.
+3. The svgRef.current will contain the reference to the svg element once the svg component is rendered, So it is safe to use in useEffect. Then you can use select to perform a d3 selection.
 
 ```js
 import React, {useRef, useEffect} from 'react';
@@ -39,7 +39,7 @@ const App = () =>{
     const svgRef = useRef()
 
     useEffect(()=>{
-        const svg = select(svgRef);
+        const svg = select(svgRef.current);
         console.log(svg)
     },[])
     return{
@@ -51,4 +51,24 @@ const App = () =>{
 }
 
 export default App;
+```
+
+4. use D3 to render the required chart elements
+
+```js
+useEffect(() => {
+    const svg = select(svgRef.current);
+
+    svg.selectAll('circle')
+      .data(data)
+      .join(
+        enter => enter
+          .append('circle')
+          .attr('r', d => d)
+          .attr('cx', (d, i) => (i * 30) + 20)
+          .attr('cy', 240),
+        update => console.log(update),
+        exit => console.log(exit)
+      );
+  }, [])
 ```
