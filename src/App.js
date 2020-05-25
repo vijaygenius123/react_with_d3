@@ -9,7 +9,7 @@ function App() {
   useEffect(() => {
     const svg = select(svgRef.current);
     svg.selectAll('circle')
-      .data(data, d => d)
+      .data(data, (d, i) => i)
       .join(
         enter => enter
           .append('circle')
